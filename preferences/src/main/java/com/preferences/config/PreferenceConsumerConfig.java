@@ -16,7 +16,6 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 @Configuration
 public class PreferenceConsumerConfig {
 
-
   @Autowired
   KafkaProperties properties;
 
@@ -31,6 +30,5 @@ public class PreferenceConsumerConfig {
             () -> new DefaultKafkaConsumerFactory<>(this.properties.buildConsumerProperties())));
     return factory;
   }
-
 
 }
