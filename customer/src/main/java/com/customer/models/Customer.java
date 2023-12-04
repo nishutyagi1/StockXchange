@@ -16,6 +16,5 @@ public class Customer implements Serializable {
   public String firstName;
   public String lastName;
   public String email;
-  @DocumentReference(lookup = "{'Customer':?#{#self._id} }")
   public List<Preference> preferences;
 }

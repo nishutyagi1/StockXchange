@@ -2,26 +2,25 @@ package com.stock.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stock.models.Preference;
+import com.stock.models.CustomerPreference;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.Header;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
-
 @Slf4j
 @Component
 public class StockProducer {
 
-  @Autowired
+@Autowired
   KafkaTemplate<String, String> kafkaTemplate;
   @Autowired
   private ObjectMapper mapper;
@@ -29,7 +28,8 @@ public class StockProducer {
   @Value("${kafka.topic.name}")
   private String topic;
 
-  public CompletableFuture<SendResult<String, String>> producePrefsEvent(Preference prefEvent)
+  public CompletableFuture<SendResult<String, String>> producePrefsEvent(
+      CustomerPreference prefEvent)
       throws JsonProcessingException {
     log.info("StockProducer.producePrefsEvent() start");
     String key = prefEvent.getPrefId();
@@ -43,7 +43,6 @@ public class StockProducer {
         handleFailureError(ex);
       }
     });
-
     log.info("StockProducer.producePrefsEvent() end");
     return future;
   }

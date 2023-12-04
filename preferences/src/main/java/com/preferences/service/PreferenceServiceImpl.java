@@ -2,7 +2,9 @@ package com.preferences.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.preferences.models.Preference;
+import com.preferences.entity.CustomerPreference;
+import com.preferences.entity.Preference;
+import com.preferences.entity.PreferenceKey;
 import com.preferences.repository.PreferenceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -22,9 +24,17 @@ public class PreferenceServiceImpl implements PreferenceService {
   @Override
   public void save(ConsumerRecord<String, String> record) throws JsonProcessingException {
     log.info("Inside save method");
-    Preference preference = objectMapper.readValue(record.value(), Preference.class);
-    String prefId = preference.getPrefId();
-    preferenceRepository.save(preference);
+    CustomerPreference  customerPreference = objectMapper.readValue(record.value(), CustomerPreference.class);
+    PreferenceKey preferenceKey = PreferenceKey.builder()
+        .prefId(customerPreference.getPrefId())
+        .userId(customerPreference.getUserId())
+        .build();
+    Preference pref = Preference.builder()
+        .preferenceKey(preferenceKey)
+        .stockName(customerPreference.getStockName())
+        .userId(customerPreference.getUserId())
+        .build();
+    preferenceRepository.save(pref);
     log.info("record saved successfully");
   }
 }

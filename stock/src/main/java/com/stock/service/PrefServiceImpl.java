@@ -1,6 +1,6 @@
 package com.stock.service;
 
-import com.stock.models.Preference;
+import com.stock.entity.Preference;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.stereotype.Service;
 

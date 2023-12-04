@@ -1,10 +1,13 @@
-package com.customer.models;
+package com.stock.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class Preference {
-
+@AllArgsConstructor
+@NoArgsConstructor
+public class CustomerPreference {
   public String userId;
   public String prefId;
   public String stockId;
@@ -12,4 +15,5 @@ public class Preference {
   public String stockName;
   public String priceChange;
   public String changePercent;
+
 }

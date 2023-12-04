@@ -16,5 +16,4 @@ public class CustomerPrefServiceException extends RuntimeException {
   private String message;
   private HttpStatus httpStatus;
 
-
 }
