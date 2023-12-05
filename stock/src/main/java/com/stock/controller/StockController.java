@@ -7,6 +7,7 @@ import com.stock.entity.Preference;
 import com.stock.entity.PreferenceKey;
 import com.stock.exception.CustomerPrefServiceException;
 import com.stock.models.CustomerPreference;
+import com.stock.models.Data;
 import com.stock.models.Stock;
 import com.stock.models.StockResponse;
 import com.stock.producer.StockProducer;
@@ -213,19 +214,27 @@ public class StockController {
   }
 
   @GetMapping("/{userId}/stocks")
-  public List<Stock> getStocksByUserPref(@PathVariable("userId") String userId){
+  public StockResponse getStocksByUserPref(@PathVariable("userId") String userId){
       List<Preference> preferences = preferenceRepository.findByUserId(userId);
       List<Stock> stocks = stockByUserPref(preferences);
-      return stocks.parallelStream()
+    stocks = stocks.parallelStream()
+        .distinct().collect(Collectors.toList());
+      stocks = stocks.stream()
           .filter(stock -> ifPrefMatchWithStock(stock,preferences))
           .collect(Collectors.toList());
+      StockResponse response = new StockResponse();
+    Data data = new Data();
+    data.setStock(stocks);
+      response.setData(data);
+      return response;
 
   }
 
   private boolean ifPrefMatchWithStock(Stock stock,List<Preference> preferences) {
-
-    Preference preference = preferences.parallelStream()
-        .filter(pref->pref.getStockName().equalsIgnoreCase(stock.getName()))
+    Preference preference = preferences.stream()
+        .filter(pref->{
+         return  stock.getSymbol().equalsIgnoreCase(pref.getPreferenceKey().getPrefId());
+        })
         .findAny()
         .orElse(null);
     return preference != null;
