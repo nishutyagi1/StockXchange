@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Service
 public class StockServiceImpl implements StockService {
@@ -19,18 +17,17 @@ public class StockServiceImpl implements StockService {
 
   @Value("${stock.service.uri}")
   String stockServiceUri;
+
+
   @Override
-  public List<Stock> getStocksByCustomerPref() {
-    String language ="en";
-   StockResponse response =
-     webClient.method(HttpMethod.GET)
-        .uri(stockServiceUri)
-        .header("token","")
-        .header("language","en")
-        /*.header("stockName",stockName)*/
-        .retrieve()
-         .bodyToMono(StockResponse.class)
-         .block();
-    return response.getData().getStock();
+  public StockResponse getStocksByCustomerPref(String userId) {
+    String language = "en";
+    StockResponse response =
+        webClient.method(HttpMethod.GET)
+            .uri(stockServiceUri + userId + "/stocks")
+            .retrieve()
+            .bodyToMono(StockResponse.class)
+            .block();
+    return response;
   }
 }

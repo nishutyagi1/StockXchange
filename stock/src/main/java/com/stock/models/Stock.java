@@ -8,17 +8,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Include;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"symbol", "name", "type", "price", "change", "change_percent", "previous_close",
     "last_update_utc", "country_code", "exchange", "exchange_open", "exchange_close", "timezone",
     "utc_offset_sec", "currency", "google_mid"})
-
+@EqualsAndHashCode
 public class Stock {
 
   @JsonProperty("symbol")
+  @Include
   private String symbol;
   @JsonProperty("name")
+  @Include
   private String name;
   @JsonProperty("type")
   private String type;
