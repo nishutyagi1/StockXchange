@@ -18,12 +18,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb
+  name: mongodb-service
   labels:
     app: mongodb
 spec:
   ports:
   - port: 27017
-    protocol: TCP
+    targetPort: 27017
   selector:
-    appdb: mongodb
+   app: mongo
+  clusterIP: None # DNS will be used here

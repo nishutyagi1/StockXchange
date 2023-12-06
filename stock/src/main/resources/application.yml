@@ -1,0 +1,65 @@
+stock:
+  service:
+    baseUri: https://real-time-finance-data.p.rapidapi.com/
+    search: /search
+
+kafka:
+  topic:
+    name: pref-topic
+spring:
+  kafka:
+    producer:
+      bootstrap-servers:
+        - localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        acks: 1
+        retries: 1
+    template:
+      default-topic: pref-topic
+    admin:
+      properties:
+        bootstrap:
+          servers: localhost:9092
+      group-id: group-id
+  cloud:
+    kubernates:
+      secrets:
+        name: mongo-db-secret
+      config:
+        enabled: true
+        sources:
+          - namespace: default
+            name: mongo-conf
+      reload:
+        enabled: true
+        mode: polling
+        period: 1000
+
+management:
+  endpoint:
+    restart:
+      enabled: true
+    health:
+      enabled: true
+    info:
+      enabled: true
+
+
+  #mongo DB configs
+  data:
+    mongodb:
+      host: ${MONGO_DB_HOST:localhost}
+      port: ${MONGO_DB_PORT:27017}
+      database: ${MONGO_DB_DATABASE:stock_app}
+      auto-index-creation: true
+
+X-RapidAPI-Key: 5ed45ea069mshf95175d3386f0dbp1b13d5jsn8eb3ce042f71
+X-RapidAPI-Host: real-time-finance-data.p.rapidapi.com
+
+
+auto:
+  create:
+    topics:
+      enable: true
