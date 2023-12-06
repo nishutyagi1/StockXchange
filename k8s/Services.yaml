@@ -1,0 +1,29 @@
+#
+# Service
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: stock-service
+spec:
+  selector:
+    app: stock # should be same as deployment selector
+  ports:
+    - name: http
+      port: 8080 # port service is exposed on 
+      nodePort: 32766
+  type: NodePort # type of the service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP
+  selector:
+    appdb: mongodb

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stock
+  name: stock-deployment # name of the deployment, Note- it won't accept all the char in name for more details refer naming convention
+spec: # spec for replicaset
+  replicas: 3
+  selector:
+    matchLabels:  # define what kind of pods this replicas should be mapping 
+      app: stock # any pods having k8s-svc1 label will be mapped to this replicas- this label should be matched with pods at template lavel
+  minReadySeconds: 10 # num of seconds req to wait for new pod and if new pods runs it will delete the existing pod(older version)
+  strategy:
+    rollingUpdate:
+      maxSurge: 1 # max number of pod can go up to replicaset during upgrade ex if replication =3 total pods= repication+maxSurge = 4
+      maxUnavailable: 0 # num of pods can be in unavailable state
+  template: # here we are going to define pods
+    metadata:
+      labels:
+        app: stock
+    spec:
+     containers:
+     - name: stock 
+       image: rakeshkumar930702/test-stock-0.0.1:2 # my image from docker hub
+       imagePullPolicy: Always
+       env:
+        - name: MONGODB_HOST
+          value: mongodb
+       ports:
+       - containerPort: 8080
+       

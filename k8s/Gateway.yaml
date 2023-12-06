@@ -1,0 +1,32 @@
+# gateway.yaml
+#
+#
+# GatewayClass
+#
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: GatewayClass
+metadata:
+  name: contour
+  namespace: default
+spec:
+  controllerName: projectcontour.io/gateway-controller
+---
+#
+# Gateway
+#
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
+metadata:
+  name: stock-exchange-gateway
+  namespace: default
+spec:
+  gatewayClassName: contour
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 8080
+      allowedRoutes:
+        kinds:
+          - kind: HTTPRoute
+        namespaces:
+ 
