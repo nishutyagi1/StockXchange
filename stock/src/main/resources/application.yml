@@ -1,3 +1,9 @@
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+
+
 stock:
   service:
     baseUri: https://real-time-finance-data.p.rapidapi.com/
@@ -36,7 +42,8 @@ spring:
         enabled: true
         mode: polling
         period: 1000
-
+  application:
+    name: stock-service
 management:
   endpoint:
     restart:

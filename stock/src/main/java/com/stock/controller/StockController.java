@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("stock/api/v1")
 @Slf4j
 public class StockController {
 

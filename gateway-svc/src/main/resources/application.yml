@@ -1,0 +1,86 @@
+server:
+  port: 9000
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+      show-components: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        all: true
+        http.server.requests: true
+  tracing:
+    sampling:
+      probability: 1.0
+  prometheus:
+    metrics:
+      export:
+        step: 10s
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+    gateway:
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenishRate: 10
+              burstCapacity: 20
+              requestedTokens: 1
+      routes:
+        - id: stock-route
+          uri: ${STOCK_SERVICE_URL:http://localhost:8080}
+          predicates:
+            - Path=/stock/**
+          filters:
+            - AddRequestHeader=X-test,test
+            - AddResponseHeader=X-test,y
+            - name: CircuitBreaker
+              args:
+                name: stockService
+                fallbackUri: forward:/stock-fallback
+            - name: Retry
+              args:
+                retries: 3
+                method: GET
+                backoff:
+                  firstBackoff: 50ms
+                  maxBackoff: 500ms
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      customerService:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+  timelimiter:
+    instances:
+      customerService:
+        timeoutDuration: 3s

@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  labels:
+    appdb: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      appdb: mongodb
+  template:
+    metadata:
+      labels:
+        appdb: mongodb
+      name: mongodb-service  
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:latest
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+           secretKeyRef:
+            name: mongo-db-secret
+            key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+           secretKeyRef:
+            name: mongo-db-secret
+            key: password
+        ports:
+        - containerPort: 27017              
+        volumeMounts:
+        - name: mongodb-persistent-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongodb-persistent-storage
+        persistentVolumeClaim:
+          claimName: mongo-pv-claim
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: persistent
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /data/mongo1
+    type: DirectoryOrCreate
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pv-claim
+  labels:
+    app: mongopv
+    tier: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 1Gi
