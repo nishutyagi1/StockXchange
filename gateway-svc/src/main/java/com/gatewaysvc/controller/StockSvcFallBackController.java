@@ -11,8 +11,7 @@ public class StockSvcFallBackController {
 
     @GetMapping("/stock-service-fallback")
     Flux<String> getStocks(){
-
-        log.info("StockSvcFallBackController: getStocks  inside fallback");
-        return  Flux.just("error response");
+        log.info("StockSvcFallBackController: getStocks : inside fallback");
+        return  Flux.just("error occurred");
     }
 }

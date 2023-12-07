@@ -63,14 +63,10 @@ spring:
               args:
                 name: stockService
                 fallbackUri: forward:/stock-fallback
-            - name: Retry
-              args:
-                retries: 3
-                method: GET
-                backoff:
-                  firstBackoff: 50ms
-                  maxBackoff: 500ms
-
+        - id: customer-route
+          uri: ${CUSTOMER_SERVICE_URL:http://localhost:8181}
+          predicates:
+            - Path=/customer/**
 resilience4j:
   circuitbreaker:
     instances:

@@ -1,12 +1,9 @@
 package com.customer.controller;
 
-import com.customer.models.Preference;
-import com.customer.models.Stock;
 import com.customer.models.StockResponse;
 import com.customer.repository.CustomerRepository;
 import com.customer.repository.PreferenceRepository;
 import com.customer.service.StockService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,11 +27,6 @@ public class CustomerController {
   public StockResponse fetchPreferencesById(@PathVariable(value = "userId") String userId) {
   //  List<Preference> preferences = preferenceRepository.findByUserId(userId);
      return stockService.getStocksByCustomerPref(userId);
-  }
-
-  @GetMapping("/hello")
-  public String greet() {
-    return "hello world";
   }
 
 }

@@ -1,0 +1,20 @@
+server:
+  port: 8181
+  servlet:
+    context-path: /customer
+
+
+#mongo DB configs
+spring:
+  data:
+   mongodb:
+    host: ${MONGO_DB_HOST:localhost}
+    port: ${MONGO_DB_PORT:27017}
+    database: ${MONGO_DB_DATABASE:stock_pref}
+
+  application:
+    name: customer-service
+
+stock:
+  service:
+    uri: http://localhost:8080/stock/api/v1/
