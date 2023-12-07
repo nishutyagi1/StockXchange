@@ -4,6 +4,7 @@
    - [Spring Gateway Service](#spring-gateway-service)
    - [Key Cloack](#key-cloack)
    - [Stock Service](#stock-service)
+   - [Customer Service](#customer-service)
    - [Mongo DB](#mongo-db)
    - [Logging](#logging)
 
@@ -20,6 +21,8 @@
 ## Stock Service
 - running on port 8080.
 
+## Customer Service
+- running on port 8181.
 ## Mongo DB
 # Logging
 
