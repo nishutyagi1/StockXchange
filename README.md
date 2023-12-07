@@ -19,7 +19,7 @@
 
 ## Key Cloack
 ## Stock Service
-- running on port 8080.
+- running on port 8383.
 
 ## Customer Service
 - running on port 8181.
